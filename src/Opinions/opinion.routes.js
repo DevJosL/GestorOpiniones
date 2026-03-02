@@ -1,42 +1,21 @@
 import { Router } from 'express';
 import {
-    getOpinions,
-    getOpinionById,
-    createOpinion,
-    updateOpinion,
-    changeOpinionStatus,
-    deleteOpinion
+  getOpinions,
+  getOpinionById,
+  createOpinion,
+  updateOpinion,
+  changeOpinionStatus
 } from './opinion.controller.js';
 
-import {
-    validateCreateOpinion,
-    validateUpdateOpinionRequest,
-    validateChangeOpinionStatus,
-    validateGetOpinionById
-} from '../../middlewares/opinion-validators.js';
+import { validateJWT } from '../../middlewares/auth-middlewares.js';
 
 const router = Router();
 
 router.get('/', getOpinions);
+router.get('/:id', getOpinionById);
 
-router.get('/:id',
-     validateGetOpinionById,
-      getOpinionById);
-
-router.post('/', 
-    validateCreateOpinion, 
-    createOpinion);
-
-router.put('/:id', 
-    validateUpdateOpinionRequest, 
-    updateOpinion);
-
-router.put('/:id/status', 
-    validateChangeOpinionStatus, 
-    changeOpinionStatus);
-
-router.delete('/:id', 
-    validateChangeOpinionStatus, 
-    deleteOpinion);
+router.post('/', validateJWT, createOpinion);
+router.put('/:id', validateJWT, updateOpinion);
+router.patch('/:id/status', validateJWT, changeOpinionStatus);
 
 export default router;

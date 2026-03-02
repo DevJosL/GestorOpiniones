@@ -21,7 +21,7 @@ const opinionSchema = new mongoose.Schema({
     User: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        requiered: [true, 'El usuario es obligatorio']
+        required: [true, 'El usuario es obligatorio']
     },
     OpinionStatus: {
         type: String,

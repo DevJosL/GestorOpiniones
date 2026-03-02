@@ -4,12 +4,16 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import helmet from 'helmet';
 import { corsOption } from './cors-configuration.js';
 import { dbConnection } from './db.js';
+import { helmetConfiguration } from './helmet-configuration.js';
+import { requestLimit } from '../middlewares/request-limit.js';
+import { errorHandler } from '../middlewares/handle-errors.js';
  
 //Rutas
 import userRoute from "../src/Users/user.routes.js";
-import loginRoute from "../src/Login/login.routes.js";
+import authRoute from "../src/Auth/auth.routes.js";
 import opinionRoute from "../src/Opinions/opinion.routes.js";
 import commentRoute from "../src/Comments/comment.routes.js";
  
@@ -20,10 +24,11 @@ const BASE_URL = '/GestorOpinionAdmin/v1';
 /*Se almacena una función para que pueda ser exportada
 o usada al crear la instancia de la aplicacion*/
 const middleware = (app) => {
+    app.use(express.json({limit: '10mb'}));
+    app.use(helmet(helmetConfiguration));
     //Limitamos el acceso y el tamaño de las consultas
     app.use(express.urlencoded({ extended:false, limit: '10mb'}));
     //Las consultas Json tendrán un tamaño máximo de 10mb
-    app.use(express.json({limit: '10mb'}));
     //Importamos los métodos creados anteriormente
     app.use(cors(corsOption));
     //Morgan nos ayudará a detectar errores del lado del usuario
@@ -34,7 +39,7 @@ const middleware = (app) => {
 // Integracjión de todas las rutas
 const routes = (app) => {
     app.use(`${BASE_URL}/users`, userRoute);
-    app.use(`${BASE_URL}`, loginRoute);
+    app.use(`${BASE_URL}/auth`, authRoute);
     app.use(`${BASE_URL}/opinions`, opinionRoute);
     app.use(`${BASE_URL}/comments`, commentRoute);
 }

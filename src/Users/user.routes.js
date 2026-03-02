@@ -6,7 +6,7 @@ import {
     updateUser,
     changeUserStatus
 } from './user.controller.js';
-
+ 
 import {
     validateCreateUser,
     validateUpdateUserRequest,
@@ -17,11 +17,11 @@ import {
 const router = Router();
 
 router.get('/', getUsers);
-router.get('/:id', validateGetUserById, getUserById);
+router.get('/:id',  validateGetUserById, getUserById);
 
 router.post(
     '/',
-    validateCreateUser,
+     validateCreateUser,
     createUser
 );
 
